@@ -1,15 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mermaid Settings</title>
     <link rel="stylesheet" href="./styles.css" />
-    <script src="https://p.trellocdn.com/power-up/client/v1/power-up.min.js"></script>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <style>
-      .row { margin: 12px 0; }
-      label { display: block; margin-bottom: 6px; }
-      input[type=text] { width: 100%; padding: 6px; }
+      .row {
+        margin: 12px 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 6px;
+      }
     </style>
   </head>
   <body>
@@ -18,7 +26,11 @@
       <p>Optional overrides for Mermaid loader.</p>
       <div class="row">
         <label for="cdn">Mermaid CDN URL</label>
-        <input id="cdn" type="text" placeholder="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" />
+        <input
+          id="cdn"
+          type="text"
+          placeholder="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+        />
       </div>
       <div class="row">
         <button id="save">Save</button>
@@ -26,22 +38,21 @@
     </div>
     <script>
       const t = window.TrelloPowerUp.iframe();
-      const input = document.getElementById('cdn');
-      const save = document.getElementById('save');
+      const input = document.getElementById("cdn");
+      const save = document.getElementById("save");
 
       async function load() {
-        const stored = await t.get('board', 'shared', 'mermaidCdn');
+        const stored = await t.get("board", "shared", "mermaidCdn");
         if (stored) input.value = stored;
       }
 
-      save.addEventListener('click', async () => {
+      save.addEventListener("click", async () => {
         const val = input.value.trim();
-        if (val) await t.set('board', 'shared', { mermaidCdn: val });
+        if (val) await t.set("board", "shared", { mermaidCdn: val });
         await t.closeModal();
       });
 
       load();
     </script>
   </body>
-  </html>
-
+</html>
