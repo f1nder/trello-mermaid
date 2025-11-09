@@ -14,10 +14,7 @@ function extractMermaidBlocks(desc) {
   return blocks;
 }
 
-const ICON = {
-  light: './assets/icon.png',
-  dark: './assets/icon.png'
-};
+const ICON = 'https://f1nder.github.io/trello-mermaid/src/assets/icon-gray.png'
 
 tpu.initialize({
 

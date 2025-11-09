@@ -28,6 +28,7 @@
     <script src="./scripts/diagram-utils.js"></script>
   </head>
   <body>
+ 
     <div class="demo-container">
       <textarea id="md" rows="12">
 ### Hi ist Diagram
@@ -52,6 +53,12 @@ flowchart LR
   DB -->|events| Analytics
 ```
       </textarea>
+      <div
+      class="sGoe5dqMgC0f8b a9roWGYPPGnc8l"
+      style="
+        background-image: url(assets/icon.png);
+      "
+    >hi</div>
       <div
         style="margin-bottom: 12px; display: none; justify-content: flex-end"
       >
@@ -97,8 +104,10 @@ flowchart LR
             window.MermaidDiagram &&
             typeof window.MermaidDiagram.attachOverlay === "function"
           ) {
-            const m = item.titleMd && item.titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
-            const modalTitle = (m ? m[2] : (item.titleMd || "")).trim() || "Mermaid Diagram View";
+            const m =
+              item.titleMd && item.titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+            const modalTitle =
+              (m ? m[2] : item.titleMd || "").trim() || "Mermaid Diagram View";
             window.MermaidDiagram.attachOverlay(stage, api, {
               code: item.code,
               modal: { title: modalTitle },
