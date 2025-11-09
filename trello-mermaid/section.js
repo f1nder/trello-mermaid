@@ -11,7 +11,7 @@ function loadTrelloClient() {
       return;
     }
     const s = document.createElement('script');
-    s.src = 'https://p.trellocdn.com/power-up/client/v1/power-up.min.js';
+    s.src = 'https://p.trellocdn.com/power-up.min.js';
     s.async = false;
     s.setAttribute('data-tpu', '');
     s.onload = () => resolve(window.TrelloPowerUp);
