@@ -30,7 +30,9 @@ tpu.initialize({
       const blocks = extractMermaidBlocks(desc);
       if (!blocks.length) return [];
       const count = blocks.length;
-      const expandedHeight = Math.min(800, 200 + count * 260);
+      // Show up to 3 diagrams' worth of height; cap by diagram count, not pixels
+      const visibleCount = Math.min(3, count);
+      const expandedHeight = 200 + visibleCount * 260;
       const collapsedHeight = 1; // effectively collapse iframe content area
       return [
         {

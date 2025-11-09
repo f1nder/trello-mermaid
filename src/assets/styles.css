@@ -272,8 +272,8 @@ body {
   cursor: pointer;
 }
 .diagram-header .toggle-src:hover {
-  text-decoration: underline;
-  color: var(--fg);
+  text-decoration: none;
+  color: var(--muted);
 }
 
 .toggle-collapse {
@@ -292,6 +292,11 @@ body {
   overflow: hidden;
   transition: height 200ms ease, opacity 200ms ease;
   will-change: height, opacity;
+}
+
+/* Ensure source block remains scrollable even when collapsible is applied */
+.diagram-source.anim-collapsible {
+  overflow: auto;
 }
 
 .spacer {
