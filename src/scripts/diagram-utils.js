@@ -171,6 +171,7 @@
     header.style.background = 'rgba(0,0,0,0.35)';
     header.style.borderRadius = '6px';
     const title = document.createElement('div');
+    title.id = 'md-modal-title';
     title.textContent = 'Diagram';
     const close = document.createElement('button');
     close.type = 'button';
@@ -222,6 +223,10 @@
     // Fallback: use in-page custom modal
     const root = ensureModalRoot();
     root.style.display = 'flex';
+    const titleEl = root.querySelector('#md-modal-title');
+    if (titleEl) {
+      titleEl.textContent = opts.title || 'Mermaid Diagram View';
+    }
     const stage = root.querySelector('#md-modal-stage');
     stage.innerHTML = '';
     await loadLibraries({ mermaidCdn: opts.mermaidCdn, panZoomCdn: opts.panZoomCdn });

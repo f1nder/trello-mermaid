@@ -97,8 +97,11 @@ flowchart LR
             window.MermaidDiagram &&
             typeof window.MermaidDiagram.attachOverlay === "function"
           ) {
+            const m = item.titleMd && item.titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+            const modalTitle = (m ? m[2] : (item.titleMd || "")).trim() || "Mermaid Diagram View";
             window.MermaidDiagram.attachOverlay(stage, api, {
               code: item.code,
+              modal: { title: modalTitle },
             });
           }
         }

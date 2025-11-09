@@ -79,6 +79,13 @@ function escapeHtml(s) {
     .replace(/'/g, '&#39;');
 }
 
+function titleMdToText(titleMd) {
+  if (!titleMd) return '';
+  const m = titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+  if (m) return m[2];
+  return titleMd.trim();
+}
+
 function loadMermaid() {
   return new Promise((resolve, reject) => {
     if (window.mermaid) return resolve(window.mermaid);
@@ -153,7 +160,7 @@ function renderAll(mermaid, items) {
       });
       // attach overlay controls (expand + fullscreen)
       if (window.MermaidDiagram && typeof window.MermaidDiagram.attachOverlay === 'function') {
-        window.MermaidDiagram.attachOverlay(out, api, { code });
+        window.MermaidDiagram.attachOverlay(out, api, { code, modal: { title: titleMdToText(titleMd) || 'Mermaid Diagram View' } });
       }
       diagramApis.push(api);
       sizeToBody();
