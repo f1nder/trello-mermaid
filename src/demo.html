@@ -53,16 +53,6 @@ flowchart LR
   DB -->|events| Analytics
 ```
       </textarea>
-      <div
-      class="sGoe5dqMgC0f8b a9roWGYPPGnc8l"
-      style="
-        background-image: url(assets/icon.png);
-      "
-    >hi</div>
-      <div
-        style="margin-bottom: 12px; display: none; justify-content: flex-end"
-      >
-        <button id="render">Render</button>
       </div>
       <div id="demo-list"></div>
     </div>
@@ -118,7 +108,7 @@ flowchart LR
 
       (async function boot() {
         try {
-          document.getElementById("render").addEventListener("click", render);
+         
           const mdEl = document.getElementById("md");
           let tId;
           mdEl.addEventListener("input", () => {
