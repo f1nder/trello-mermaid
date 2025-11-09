@@ -1,7 +1,9 @@
 {
   "attachments": [],
   "authorization": {
-    "methods": ["none"]
+    "methods": [
+      "none"
+    ]
   },
   "capabilities": [
     "card-badges",
@@ -12,7 +14,7 @@
   "connectors": [],
   "description": "Render Mermaid diagrams found in card descriptions (```mermaid ...```).",
   "icon": {
-    "url": "./assets/icon.svg"
+    "url": "./assets/icon.png"
   },
   "iframeConnectorUrl": "./index.html",
   "name": "Mermaid Renderer",
