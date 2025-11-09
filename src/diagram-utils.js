@@ -352,6 +352,64 @@
     return `<div class="diagram-title">${escapeHtml(titleMd)}</div>`;
   }
 
+  // Simple animated show/hide utilities for any element.
+  // They animate height and opacity, and fall back to immediate toggle if needed.
+  function animateShow(el, opts = {}) {
+    if (!el) return Promise.resolve();
+    el.classList.add('anim-collapsible');
+    const duration = opts.duration || 200;
+    const easing = opts.easing || 'ease';
+    const cs = window.getComputedStyle(el);
+    const targetDisplay = cs.display === 'none' ? (opts.display || 'block') : cs.display;
+    return new Promise((resolve) => {
+      el.style.transition = `height ${duration}ms ${easing}, opacity ${duration}ms ${easing}`;
+      el.style.opacity = '0';
+      el.style.display = targetDisplay;
+      el.style.height = '0px';
+      void el.offsetHeight; // reflow
+      const target = el.scrollHeight;
+      el.style.height = target + 'px';
+      el.style.opacity = '1';
+      const done = () => {
+        el.removeEventListener('transitionend', done);
+        el.style.height = '';
+        el.style.transition = '';
+        resolve();
+      };
+      el.addEventListener('transitionend', done);
+    });
+  }
+
+  function animateHide(el, opts = {}) {
+    if (!el) return Promise.resolve();
+    el.classList.add('anim-collapsible');
+    const duration = opts.duration || 200;
+    const easing = opts.easing || 'ease';
+    return new Promise((resolve) => {
+      const start = el.scrollHeight;
+      el.style.transition = `height ${duration}ms ${easing}, opacity ${duration}ms ${easing}`;
+      el.style.height = start + 'px';
+      el.style.opacity = '1';
+      void el.offsetHeight; // reflow
+      el.style.height = '0px';
+      el.style.opacity = '0';
+      const done = () => {
+        el.removeEventListener('transitionend', done);
+        el.style.display = 'none';
+        el.style.height = '';
+        el.style.transition = '';
+        resolve();
+      };
+      el.addEventListener('transitionend', done);
+    });
+  }
+
+  function animateToggle(el, opts = {}) {
+    if (!el) return Promise.resolve();
+    const isHidden = window.getComputedStyle(el).display === 'none';
+    return isHidden ? animateShow(el, opts) : animateHide(el, opts);
+  }
+
   window.MermaidDiagram = {
     load: loadLibraries,
     render,
@@ -361,5 +419,8 @@
     openModal,
     parseMarkdown,
     renderTitleHtml,
+    animateShow,
+    animateHide,
+    animateToggle,
   };
 })();

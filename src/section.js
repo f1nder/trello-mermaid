@@ -114,10 +114,15 @@ function createDiagramEl(code, idx, titleMd) {
   const toggle = document.createElement('button');
   toggle.className = 'toggle-src';
   toggle.textContent = 'Show source';
-  toggle.addEventListener('click', () => {
-    const visible = pre.style.display !== 'none';
-    pre.style.display = visible ? 'none' : 'block';
-    toggle.textContent = visible ? 'Show source' : 'Hide source';
+  pre.classList.add('anim-collapsible');
+  toggle.addEventListener('click', async () => {
+    const isHidden = window.getComputedStyle(pre).display === 'none';
+    if (window.MermaidDiagram && typeof window.MermaidDiagram.animateToggle === 'function') {
+      await window.MermaidDiagram.animateToggle(pre);
+    } else {
+      pre.style.display = isHidden ? 'block' : 'none';
+    }
+    toggle.textContent = isHidden ? 'Hide source' : 'Show source';
     sizeToBody();
   });
   header.appendChild(toggle);

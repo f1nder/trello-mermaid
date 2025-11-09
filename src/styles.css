@@ -241,6 +241,14 @@ body {
   cursor: pointer;
 }
 
+/* Generic animated show/hide helper. Apply to any element you want to
+   expand/collapse smoothly using JS helpers (animateShow/Hide/Toggle). */
+.anim-collapsible {
+  overflow: hidden;
+  transition: height 200ms ease, opacity 200ms ease;
+  will-change: height, opacity;
+}
+
 .spacer {
   flex: 1;
 }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="landing">
+      <div class="landing-card">
+        <div class="hero">
+          <img src="./icon.svg" alt="Mermaid" />
+          <div>
+            <h1>Privacy Policy</h1>
+            <p class="muted">Effective: <span id="effective-date"></span></p>
+          </div>
+        </div>
+
+        <div class="section-container">
+          <div class="section-header">
+            <h2 class="diagram-title" style="margin: 0">Overview</h2>
+          </div>
+          <p>
+            This Privacy Policy explains how this Trello Power‑Up (the
+            “Service”) processes information when you use it to render Mermaid
+            diagrams on Trello cards. We aim to collect the minimum necessary
+            data to operate the Service.
+          </p>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">
+              Information We Process
+            </h2>
+          </div>
+          <ul class="list-plain">
+            <li>
+              Diagram content: The Service reads Trello card descriptions to
+              find code blocks labeled <code>```mermaid</code> for the sole
+              purpose of rendering diagrams in your browser.
+            </li>
+          </ul>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">
+              What We Don’t Collect
+            </h2>
+          </div>
+          <ul class="list-plain">
+            <li>No analytics, tracking cookies, or profiling.</li>
+            <li>
+              No user account data beyond what Trello provides to the iframe
+              sandbox.
+            </li>
+            <li>
+              No server‑side storage of your diagrams or card content by this
+              Service.
+            </li>
+          </ul>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">
+              Third‑Party Services
+            </h2>
+          </div>
+          <ul class="list-plain">
+            <li>
+              Trello Power‑Up Platform: The Service runs within Trello. Your use
+              is also subject to Trello/Atlassian terms and privacy policies.
+            </li>
+            <li>
+              Mermaid Library CDN: Mermaid is loaded from a public CDN. Requests
+              to the CDN are subject to the CDN provider’s policies.
+            </li>
+          </ul>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">Data Retention</h2>
+          </div>
+          <p>
+            The Service does not persist your diagram content on its own servers
+            and does not store any settings or personal data.
+          </p>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">Security</h2>
+          </div>
+          <p>
+            The Service follows Mermaid’s recommended security modes when
+            rendering diagrams (e.g., disabling potentially unsafe features) and
+            avoids storing sensitive data.
+          </p>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">Your Choices</h2>
+          </div>
+          <ul class="list-plain">
+            <li>Disable or remove the Power‑Up at any time from your board.</li>
+            <li>
+              Remove Mermaid code blocks from card descriptions to stop
+              rendering.
+            </li>
+          </ul>
+
+          <div class="section-header" style="margin-top: 16px">
+            <h2 class="diagram-title" style="margin: 0">Contact</h2>
+          </div>
+          <p>
+            For privacy inquiries, please contact the maintainer of this
+            Power‑Up.
+          </p>
+        </div>
+
+        <div class="actions">
+          <a class="btn ghost" href="./index.html">Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Set today's date as effective date by default
+      (function () {
+        try {
+          var el = document.getElementById("effective-date");
+          if (el) el.textContent = new Date().toISOString().slice(0, 10);
+        } catch (_) {}
+      })();
+    </script>
+  </body>
+</html>
