@@ -170,7 +170,9 @@ async function init() {
     });
   } catch (err) {
     const el = document.getElementById('diagrams');
-    el.innerHTML = `<div class="diagram-error">Failed to initialize: ${String(err)}</div>`;
+    const msg = (err && (err.message || err.type)) ? (err.message || `Event: ${err.type}`) : String(err);
+    try { console.error('Mermaid section init error:', err); } catch (e) { }
+    el.innerHTML = `<div class="diagram-error">Failed to initialize: ${msg}</div>`;
   } finally {
     sizeToBody();
   }
