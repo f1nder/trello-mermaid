@@ -36,17 +36,23 @@ tpu.initialize({
   },
 
   'card-back-section': function (t) {
-    return t.card('desc').then(({ desc }) => {
+    return Promise.all([
+      t.card('desc'),
+      t.get('card', 'shared', 'mermaidCollapsed')
+    ]).then(([{ desc }, collapsed]) => {
       const blocks = extractMermaidBlocks(desc);
       if (!blocks.length) return [];
+      const count = blocks.length;
+      const expandedHeight = Math.min(800, 200 + count * 260);
+      const collapsedHeight = 64; // header + controls only
       return [
         {
-          title: 'Mermaid Diagrams',
+          title: `Mermaid Diagrams (${count})`,
           icon: ICON.light,
           content: {
             type: 'iframe',
             url: t.signUrl('./section.html'),
-            height: Math.min(800, 200 + blocks.length * 260),
+            height: collapsed ? collapsedHeight : expandedHeight,
           },
         },
       ];
@@ -61,4 +67,3 @@ tpu.initialize({
     });
   },
 });
-

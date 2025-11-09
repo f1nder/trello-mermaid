@@ -70,6 +70,18 @@ html, body {
   cursor: pointer;
 }
 
+.toggle-collapse {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--fg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.spacer { flex: 1; }
+
 .empty {
   color: var(--muted);
 }
@@ -77,4 +89,3 @@ html, body {
 .diagram-error {
   color: #b71c1c;
 }
-

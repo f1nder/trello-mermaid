@@ -76,9 +76,10 @@ function renderAll(mermaid, blocks) {
 
 async function init() {
   try {
-    const [{ desc }, cdnOverride] = await Promise.all([
+    const [{ desc }, cdnOverride, collapsed] = await Promise.all([
       t.card('desc'),
-      t.get('board', 'shared', 'mermaidCdn')
+      t.get('board', 'shared', 'mermaidCdn'),
+      t.get('card', 'shared', 'mermaidCollapsed')
     ]);
     if (cdnOverride) {
       window.MERMAID_CDN = cdnOverride;
@@ -91,9 +92,31 @@ async function init() {
       return;
     }
 
+    const toggleBtn = document.getElementById('toggle-collapse');
+    const diagramsEl = document.getElementById('diagrams');
+
+    let isCollapsed = Boolean(collapsed);
+    function applyCollapsedUi() {
+      if (isCollapsed) {
+        diagramsEl.style.display = 'none';
+        toggleBtn.textContent = 'Expand';
+      } else {
+        diagramsEl.style.display = 'block';
+        toggleBtn.textContent = 'Collapse';
+      }
+      TrelloPowerUp.sizeTo(document.body).catch(() => {});
+    }
+
+    toggleBtn.addEventListener('click', async () => {
+      isCollapsed = !isCollapsed;
+      applyCollapsedUi();
+      await t.set('card', 'shared', { mermaidCollapsed: isCollapsed });
+    });
+
     const mermaid = await loadMermaid();
     mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
     renderAll(mermaid, blocks);
+    applyCollapsedUi();
   } catch (err) {
     const el = document.getElementById('diagrams');
     el.innerHTML = `<div class="diagram-error">Failed to initialize: ${String(err)}</div>`;
