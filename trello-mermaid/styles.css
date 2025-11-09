@@ -1,19 +1,21 @@
 :root {
-  --fg: #e5e7eb;         /* text */
-  --muted: #94a3b8;      /* secondary text */
-  --border: #334155;     /* borders */
-  --bg: #0f172a;         /* page background */
-  --panel: #111827;      /* cards/panels */
-  --button: #1f2937;     /* button bg */
-  --button-fg: #e5e7eb;  /* button text */
+  --fg: #e5e7eb; /* text */
+  --muted: #94a3b8; /* secondary text */
+  --border: #393a3f; /* borders */
+  --bg: #242528; /* page background */
+  --panel: #242528; /* cards/panels */
+  --button: #2d2f32; /* button bg */
+  --button-fg: #e5e7eb; /* button text */
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 .boot {
@@ -53,6 +55,81 @@ html, body {
   max-width: 100%;
 }
 
+/* Shared pan/zoom controls */
+.zoom-controls {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+/* Generic stage container used by both demo and section */
+.diagram-stage {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diagram-stage svg {
+  max-width: 100%;
+  width: 100%;
+  height: auto !important; /* override inline height */
+  min-height: 400px; /* default canvas height */
+  max-height: 400px; /* collapsed max height */
+  display: block;
+}
+
+.diagram-stage.expanded svg {
+  max-height: none;
+}
+
+/* Fullscreen modal stage fills viewport */
+.diagram-stage.fullscreen svg {
+  height: 100% !important;
+  max-height: none !important;
+}
+
+/* Overlay controls on stage */
+.diagram-overlay {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 2;
+}
+
+.overlay-zoom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diagram-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--button);
+  color: var(--button-fg);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.diagram-fullscreen-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+}
+
 .diagram-source {
   background: #0b1021;
   color: #e8e8e8;
@@ -83,7 +160,9 @@ html, body {
   cursor: pointer;
 }
 
-.spacer { flex: 1; }
+.spacer {
+  flex: 1;
+}
 
 .empty {
   color: var(--muted);

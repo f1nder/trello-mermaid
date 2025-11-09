@@ -1,5 +1,6 @@
 /* global TrelloPowerUp */
 let t; // initialized after Trello client is available
+let diagramApis = [];
 
 function loadTrelloClient() {
   return new Promise((resolve, reject) => {
@@ -85,19 +86,25 @@ function createDiagramEl(code, idx) {
 function renderAll(mermaid, blocks) {
   const list = document.getElementById('diagrams');
   list.innerHTML = '';
-  blocks.forEach((code, i) => {
+  diagramApis = [];
+  blocks.forEach(async (code, i) => {
     const { wrapper, out, pre } = createDiagramEl(code, i);
     list.appendChild(wrapper);
     pre.style.display = 'none';
+    out.classList.add('diagram-stage');
     try {
-      mermaid.render(`m-${i}`, code).then(({ svg }) => {
-        out.innerHTML = svg;
-        sizeToBody();
-      }).catch((err) => {
-        out.innerHTML = `<div class="diagram-error">Mermaid render error: ${String(err)}</div>`;
+      const api = await window.MermaidDiagram.render(out, code, {
+        ariaRoleDescription: 'flowchart-v2',
+        attachResize: false,
       });
+      // attach overlay controls (expand + fullscreen)
+      if (window.MermaidDiagram && typeof window.MermaidDiagram.attachOverlay === 'function') {
+        window.MermaidDiagram.attachOverlay(out, api, { code });
+      }
+      diagramApis.push(api);
+      sizeToBody();
     } catch (e) {
-      out.innerHTML = `<div class="diagram-error">Mermaid exception: ${String(e)}</div>`;
+      out.innerHTML = `<div class=\"diagram-error\">Mermaid render error: ${String(e)}</div>`;
     }
   });
 }
@@ -144,7 +151,8 @@ async function init() {
       await t.set('card', 'shared', { mermaidCollapsed: isCollapsed });
     });
 
-    const mermaid = await loadMermaid();
+    await window.MermaidDiagram.load({ mermaidCdn: window.MERMAID_CDN });
+    const mermaid = window.mermaid;
     if (!mermaid || typeof mermaid.initialize !== 'function') {
       throw new Error('Mermaid failed to load or has no initialize()');
     }

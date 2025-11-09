@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mermaid Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .demo-container {
+        padding: 16px;
+      }
+      .diagram-stage {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--panel);
+      }
+    </style>
+    <!-- Use the shared implementation used by the plugin -->
+    <script src="./diagram-utils.js"></script>
+  </head>
+  <body>
+    <div class="demo-container">
+      <div id="stage" class="diagram-stage"></div>
+    </div>
+
+    <script>
+      // Sample Mermaid diagram code
+      const code = `flowchart TD
+  A[Start] --> B{Auth?}
+  B -- Yes --> C[Dashboard]
+  B -- No --> D[Login]
+  C --> E[Settings]
+  C --> F[Reports]
+  E --> G[Done]
+  F --> G`;
+
+      async function render() {
+        const stage = document.getElementById("stage");
+        const shell = stage.parentElement; // .demo-container
+        stage.innerHTML = "";
+        // Load libraries via shared implementation
+        await window.MermaidDiagram.load();
+        if (window.mermaid && typeof window.mermaid.initialize === "function") {
+          window.mermaid.initialize({ startOnLoad: false, theme: "dark" });
+        }
+
+        const api = await window.MermaidDiagram.render(stage, code, {
+          ariaRoleDescription: "flowchart-v2",
+        });
+
+        if (
+          window.MermaidDiagram &&
+          typeof window.MermaidDiagram.attachOverlay === "function"
+        ) {
+          window.MermaidDiagram.attachOverlay(stage, api, { code });
+        }
+      }
+
+      (async function boot() {
+        try {
+          await render();
+        } catch (e) {
+          const container = document.getElementById("stage");
+          container.innerHTML = `<div class="diagram-error">Mermaid render error: ${String(
+            e
+          )}</div>`;
+        }
+      })();
+    </script>
+  </body>
+</html>
