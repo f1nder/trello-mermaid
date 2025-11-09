@@ -164,6 +164,35 @@ body {
   max-height: none;
 }
 
+/* Shimmer loading state (used when iframe is (re)mounted) */
+.diagram-stage.shimmer {
+  min-height: 120px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: linear-gradient(90deg, #26272b 25%, #2b2d32 37%, #26272b 63%);
+  background-size: 400% 100%;
+  animation: shimmer-move 1.2s ease-in-out infinite;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+}
+
+.shimmer-block {
+  width: 100%;
+  height: 16px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes shimmer-move {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
 /* Fullscreen modal stage fills viewport */
 .diagram-stage.fullscreen svg {
   height: 100% !important;

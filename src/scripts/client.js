@@ -44,14 +44,15 @@ tpu.initialize({
       if (!blocks.length) return [];
       const count = blocks.length;
       const expandedHeight = Math.min(800, 200 + count * 260);
-      const collapsedHeight = 16; // minimal iframe when collapsed
+      const collapsedHeight = 0; // fully hide iframe when collapsed
       return [
         {
           title: `Mermaid Diagrams (${count})`,
           icon: ICON.light,
           content: {
             type: 'iframe',
-            url: t.signUrl('./section.html'),
+            // Pass collapsed state to force iframe reload and allow lazy init
+            url: t.signUrl(`./section.html?collapsed=${collapsed ? '1' : '0'}`),
             height: collapsed ? collapsedHeight : expandedHeight,
           },
           action: {

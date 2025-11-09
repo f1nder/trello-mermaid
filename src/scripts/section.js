@@ -170,8 +170,52 @@ function renderAll(mermaid, items) {
   });
 }
 
+function isCollapsedFromUrl() {
+  try {
+    const u = new URL(window.location.href);
+    return u.searchParams.get('collapsed') === '1';
+  } catch (_) {
+    return false;
+  }
+}
+
+function showShimmer() {
+  const list = document.getElementById('diagrams');
+  if (!list) return;
+  list.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'diagram-wrapper';
+  const stage = document.createElement('div');
+  stage.className = 'diagram-stage shimmer';
+  const block1 = document.createElement('div');
+  block1.className = 'shimmer-block';
+  const block2 = document.createElement('div');
+  block2.className = 'shimmer-block';
+  stage.appendChild(block1);
+  stage.appendChild(block2);
+  card.appendChild(stage);
+  list.appendChild(card);
+}
+
+function clearContent() {
+  const list = document.getElementById('diagrams');
+  if (list) list.innerHTML = '';
+  diagramApis = [];
+}
+
 async function init() {
   try {
+    // If collapsed, clear DOM and exit (iframe is effectively closed)
+    if (isCollapsedFromUrl()) {
+      clearContent();
+      await sizeToBody();
+      return;
+    }
+
+    // Show shimmer immediately while loading Trello client + Mermaid
+    showShimmer();
+    await sizeToBody();
+
     const TP = await loadTrelloClient();
     t = TP.iframe();
 
