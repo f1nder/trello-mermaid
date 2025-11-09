@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mermaid Section</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://p.trellocdn.com/power-up/client/v1/power-up.min.js"></script>
+    <script>
+      // Configure which Mermaid build to load; can be overridden via settings in future
+      window.MERMAID_CDN = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+    </script>
+    <script defer src="./section.js"></script>
+  </head>
+  <body>
+    <div id="container" class="section-container">
+      <div class="section-header">
+        <img src="./icon.svg" alt="Mermaid" />
+        <h2>Mermaid Diagrams</h2>
+      </div>
+      <div id="diagrams" class="diagrams-list"></div>
+    </div>
+  </body>
+  </html>
+

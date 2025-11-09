@@ -1,0 +1,27 @@
+{
+  "attachments": [],
+  "authorization": {
+    "methods": ["none"]
+  },
+  "capabilities": [
+    "card-badges",
+    "card-back-section",
+    "format-url",
+    "show-settings"
+  ],
+  "connectors": [],
+  "description": "Render Mermaid diagrams found in card descriptions (```mermaid ...```).",
+  "icon": {
+    "url": "./icon.svg"
+  },
+  "iframeConnectorUrl": "./index.html",
+  "name": "Mermaid Renderer",
+  "privacyPolicyUrl": "https://example.com/privacy",
+  "redirectUrls": [],
+  "requested_scopes": [],
+  "supportEmail": "",
+  "templates": [],
+  "termsOfServiceUrl": "https://example.com/tos",
+  "version": 1
+}
+
