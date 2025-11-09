@@ -13,12 +13,16 @@
         background: transparent !important;
         height: 100%;
       }
+      body.collapsed-frame {
+        height: auto;
+      }
       /* Make inner frame scrollable when content exceeds allotted height */
       #container.section-container {
         height: 100%;
         box-sizing: border-box;
         overflow: auto;
       }
+      body.collapsed-frame #container.section-container { display: none; }
     </style>
     <script>
       // Default Mermaid CDN (can be overridden via board settings)

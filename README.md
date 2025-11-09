@@ -2,7 +2,12 @@
 
 Render Mermaid diagrams directly inside Trello. This Trello Power-Up auto-detects Mermaid fenced code blocks in card descriptions and renders interactive SVG diagrams (flowcharts, sequence, class, state, ER, and Gantt) with zoom, pan, and fullscreen controls. No server or database—everything runs client-side using mermaid.js.
 
-![Trello Mermaid Power-Up icon](src/assets/icon.png "Trello Mermaid Renderer")
+<p align="center">
+  <img src="src/assets/trello-tile.png" alt="Trello logo tile" width="64" />
+  <span >  ___ </span>
+  <img src="src/assets/icon.png" alt="Mermaid logo" width="64" />
+</p>
+<p align="center"></p>
 
 ## Table of Contents
 
