@@ -124,12 +124,13 @@ function createDiagramEl(code, idx, titleMd) {
   pre.classList.add('anim-collapsible');
   toggle.addEventListener('click', async () => {
     const isHidden = window.getComputedStyle(pre).display === 'none';
+    // Update button text immediately for snappier UX
+    toggle.textContent = isHidden ? 'Hide source' : 'Show source';
     if (window.MermaidDiagram && typeof window.MermaidDiagram.animateToggle === 'function') {
       await window.MermaidDiagram.animateToggle(pre);
     } else {
       pre.style.display = isHidden ? 'block' : 'none';
     }
-    toggle.textContent = isHidden ? 'Hide source' : 'Show source';
     sizeToBody();
   });
   header.appendChild(toggle);

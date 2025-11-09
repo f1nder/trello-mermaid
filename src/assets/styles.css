@@ -37,7 +37,7 @@ body {
   padding: 28px;
   max-width: 720px;
   width: 100%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 .hero {
   display: flex;
@@ -126,7 +126,13 @@ body {
   gap: 8px;
   margin-bottom: 8px;
 }
-.diagram-header .spacer { flex: 1; }
+.diagram-header .spacer {
+  flex: 1;
+}
+
+.toggle-src {
+  font-size: 11px;
+}
 
 .diagram-out svg {
   max-width: 100%;
