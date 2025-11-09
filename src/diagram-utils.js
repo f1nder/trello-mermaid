@@ -257,6 +257,28 @@
 
     const pz = initPanZoom(svgEl, opts.panZoomOptions);
 
+    // Mouse wheel behavior: only zoom when Ctrl/Cmd is held.
+    // Otherwise allow the default page/container scroll.
+    let wheelHandler = null;
+    try {
+      wheelHandler = function (e) {
+        try {
+          if (!e) return;
+          if (e.ctrlKey || e.metaKey) {
+            // Allow svg-pan-zoom to handle and preventDefault.
+            return;
+          }
+          // Stop panzoom's wheel handler from seeing this event.
+          // Do not preventDefault so scrolling continues.
+          if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+          else if (typeof e.stopPropagation === 'function') e.stopPropagation();
+        } catch (_) { }
+      };
+      // Capture phase so we intercept before svg-pan-zoom listener.
+      svgEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
+      stageEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
+    } catch (_) { }
+
     function resize() { try { pz && pz.resize(); pz && pz.fit(); pz && pz.center(); } catch (_) { } }
     let onResize = null;
     if (opts.attachResize !== false) {
@@ -272,7 +294,16 @@
       reset: () => { if (pz) { pz.reset(); pz.center(); pz.fit(); } },
       fit: () => { if (pz) pz.fit(); },
       resize,
-      destroy: () => { try { onResize && window.removeEventListener('resize', onResize); pz && pz.destroy(); } catch (_) { } },
+      destroy: () => {
+        try {
+          onResize && window.removeEventListener('resize', onResize);
+          if (wheelHandler) {
+            svgEl.removeEventListener('wheel', wheelHandler, { capture: true });
+            stageEl.removeEventListener('wheel', wheelHandler, { capture: true });
+          }
+          pz && pz.destroy();
+        } catch (_) { }
+      },
     };
   }
 

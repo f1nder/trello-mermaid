@@ -55,7 +55,7 @@ tpu.initialize({
             height: collapsed ? collapsedHeight : expandedHeight,
           },
           action: {
-            text: collapsed ? 'Expand' : 'Collapse',
+            text: collapsed ? 'Show' : 'Hide',
             callback: function (t) {
               return t.set('card', 'shared', { mermaidCollapsed: !collapsed });
             },

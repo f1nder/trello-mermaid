@@ -8,13 +8,22 @@
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <style>
       /* Make the iframe (section) background transparent inside Trello */
-      html, body { background: transparent !important; }
-      /* Ensure diagram canvas doesn't paint a solid background */
-      .diagram-stage svg { background: transparent !important; }
+      html,
+      body {
+        background: transparent !important;
+        height: 100%;
+      }
+      /* Make inner frame scrollable when content exceeds allotted height */
+      #container.section-container {
+        height: 100%;
+        box-sizing: border-box;
+        overflow: auto;
+      }
     </style>
     <script>
       // Default Mermaid CDN (can be overridden via board settings)
-      window.MERMAID_CDN = "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js";
+      window.MERMAID_CDN =
+        "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js";
     </script>
     <script defer src="./diagram-utils.js"></script>
     <script defer src="./section.js"></script>
