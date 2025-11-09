@@ -34,7 +34,7 @@ tpu.initialize({
       return [
         {
           title: `Diagrams (${count})`,
-          icon: ICON.light,
+          icon: ICON,
           content: {
             type: 'iframe',
             // Pass collapsed state to force iframe reload and allow lazy init
