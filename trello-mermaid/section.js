@@ -32,15 +32,51 @@ function sizeToBody() {
 
 const mermaidBlockRegex = /```\s*mermaid\n([\s\S]*?)```/gim;
 
-function extractMermaidBlocks(desc) {
+function extractMermaidBlocksWithTitles(desc) {
   if (!desc) return [];
-  const blocks = [];
+  const results = [];
   let match;
   while ((match = mermaidBlockRegex.exec(desc)) !== null) {
-    const code = match[1].trim();
-    if (code) blocks.push(code);
+    const code = (match[1] || '').trim();
+    if (!code) continue;
+    const startIdx = match.index;
+    // Look backwards from startIdx for the nearest non-empty line (potential heading)
+    const before = desc.slice(0, startIdx).trimEnd();
+    const lines = before.split(/\r?\n/);
+    let titleMd = '';
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const line = lines[i].trim();
+      if (line.length === 0) continue; // skip blank lines right above
+      // Heading: up to 3 leading spaces then 1-6 # and a space
+      const m = line.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+      if (m) {
+        titleMd = line; // keep original heading markup
+      }
+      break;
+    }
+    results.push({ code, titleMd });
   }
-  return blocks;
+  return results;
+}
+
+function renderTitleHtml(titleMd) {
+  if (!titleMd) return '';
+  const m = titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+  if (m) {
+    const level = Math.min(6, m[1].length);
+    const text = m[2];
+    return `<h${level} class="diagram-title">${escapeHtml(text)}</h${level}>`;
+  }
+  return `<div class="diagram-title">${escapeHtml(titleMd)}</div>`;
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function loadMermaid() {
@@ -55,9 +91,15 @@ function loadMermaid() {
   });
 }
 
-function createDiagramEl(code, idx) {
+function createDiagramEl(code, idx, titleMd) {
   const wrapper = document.createElement('div');
   wrapper.className = 'diagram-wrapper';
+
+  if (titleMd) {
+    const title = document.createElement('div');
+    title.innerHTML = renderTitleHtml(titleMd);
+    wrapper.appendChild(title.firstChild);
+  }
 
   const pre = document.createElement('pre');
   pre.className = 'diagram-source';
@@ -83,12 +125,12 @@ function createDiagramEl(code, idx) {
   return { wrapper, out, pre };
 }
 
-function renderAll(mermaid, blocks) {
+function renderAll(mermaid, items) {
   const list = document.getElementById('diagrams');
   list.innerHTML = '';
   diagramApis = [];
-  blocks.forEach(async (code, i) => {
-    const { wrapper, out, pre } = createDiagramEl(code, i);
+  items.forEach(async ({ code, titleMd }, i) => {
+    const { wrapper, out, pre } = createDiagramEl(code, i, titleMd);
     list.appendChild(wrapper);
     pre.style.display = 'none';
     out.classList.add('diagram-stage');
@@ -122,7 +164,7 @@ async function init() {
     if (cdnOverride) {
       window.MERMAID_CDN = cdnOverride;
     }
-    const blocks = extractMermaidBlocks(desc);
+    const blocks = extractMermaidBlocksWithTitles(desc);
 
     if (!blocks.length) {
       document.getElementById('diagrams').innerHTML = '<div class="empty">No ```mermaid``` code blocks found in the description.</div>';
@@ -169,7 +211,7 @@ async function init() {
     t.render(async () => {
       try {
         const { desc: latestDesc } = await t.card('desc');
-        const latestBlocks = extractMermaidBlocks(latestDesc);
+        const latestBlocks = extractMermaidBlocksWithTitles(latestDesc);
         if (latestBlocks.length) {
           renderAll(mermaid, latestBlocks);
         } else {

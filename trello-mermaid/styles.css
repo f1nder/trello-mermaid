@@ -46,9 +46,14 @@ body {
 
 .diagram-wrapper {
   padding: 12px;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 6px;
   background: var(--panel);
+}
+
+.diagram-title {
+  margin: 0 0 8px 0;
+  padding: 0;
 }
 
 .diagram-out svg {
@@ -78,6 +83,9 @@ body {
   min-height: 400px; /* default canvas height */
   max-height: 400px; /* collapsed max height */
   display: block;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
 .diagram-stage.expanded svg {

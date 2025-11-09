@@ -258,6 +258,51 @@
     };
   }
 
+  // Markdown parsing helpers shared by demo and section
+  const MERMAID_BLOCK_RE = /```\s*mermaid\n([\s\S]*?)```/gim;
+  function parseMarkdown(markdown) {
+    const results = [];
+    if (!markdown) return results;
+    let match;
+    while ((match = MERMAID_BLOCK_RE.exec(markdown)) !== null) {
+      const code = (match[1] || '').trim();
+      if (!code) continue;
+      const startIdx = match.index;
+      const before = markdown.slice(0, startIdx).trimEnd();
+      const lines = before.split(/\r?\n/);
+      let titleMd = '';
+      for (let i = lines.length - 1; i >= 0; i--) {
+        const line = lines[i].trim();
+        if (line.length === 0) continue;
+        const m = line.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+        if (m) titleMd = line;
+        break;
+      }
+      results.push({ code, titleMd });
+    }
+    return results;
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function renderTitleHtml(titleMd) {
+    if (!titleMd) return '';
+    const m = titleMd.match(/^ {0,3}(#{1,6})\s+(.+?)\s*$/);
+    if (m) {
+      const level = Math.min(6, m[1].length);
+      const text = m[2];
+      return `<h${level} class="diagram-title">${escapeHtml(text)}</h${level}>`;
+    }
+    return `<div class="diagram-title">${escapeHtml(titleMd)}</div>`;
+  }
+
   window.MermaidDiagram = {
     load: loadLibraries,
     render,
@@ -265,5 +310,7 @@
     bindControls,
     attachOverlay,
     openModal,
+    parseMarkdown,
+    renderTitleHtml,
   };
 })();
