@@ -207,7 +207,10 @@ async function init() {
   try {
     // If collapsed, clear DOM and exit (iframe is effectively closed)
     if (isCollapsedFromUrl()) {
-      try { document.body.classList.add('collapsed-frame'); } catch (_) {}
+      try {
+        document.body.classList.add('collapsed-frame');
+        document.documentElement.classList.add('collapsed-frame');
+      } catch (_) {}
       clearContent();
       await sizeToBody();
       return;
