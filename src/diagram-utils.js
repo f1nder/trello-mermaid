@@ -257,27 +257,31 @@
 
     const pz = initPanZoom(svgEl, opts.panZoomOptions);
 
-    // Mouse wheel behavior: only zoom when Ctrl/Cmd is held.
-    // Otherwise allow the default page/container scroll.
+    // Mouse wheel behavior gating:
+    // By default, only zoom when Ctrl/Cmd is held (good for embedded sections).
+    // In fullscreen, caller can pass { gateWheelToCtrlCmd: false } to allow free wheel zoom.
     let wheelHandler = null;
-    try {
-      wheelHandler = function (e) {
-        try {
-          if (!e) return;
-          if (e.ctrlKey || e.metaKey) {
-            // Allow svg-pan-zoom to handle and preventDefault.
-            return;
-          }
-          // Stop panzoom's wheel handler from seeing this event.
-          // Do not preventDefault so scrolling continues.
-          if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-          else if (typeof e.stopPropagation === 'function') e.stopPropagation();
-        } catch (_) { }
-      };
-      // Capture phase so we intercept before svg-pan-zoom listener.
-      svgEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
-      stageEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
-    } catch (_) { }
+    const gateWheel = opts.gateWheelToCtrlCmd !== false; // default: true
+    if (gateWheel) {
+      try {
+        wheelHandler = function (e) {
+          try {
+            if (!e) return;
+            if (e.ctrlKey || e.metaKey) {
+              // Allow svg-pan-zoom to handle and preventDefault.
+              return;
+            }
+            // Stop panzoom's wheel handler from seeing this event.
+            // Do not preventDefault so scrolling continues.
+            if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            else if (typeof e.stopPropagation === 'function') e.stopPropagation();
+          } catch (_) { }
+        };
+        // Capture phase so we intercept before svg-pan-zoom listener.
+        svgEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
+        stageEl.addEventListener('wheel', wheelHandler, { capture: true, passive: true });
+      } catch (_) { }
+    }
 
     function resize() { try { pz && pz.resize(); pz && pz.fit(); pz && pz.center(); } catch (_) { } }
     let onResize = null;

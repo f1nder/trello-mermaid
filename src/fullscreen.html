@@ -33,7 +33,7 @@
             try { window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'dark', themeVariables: { background: 'transparent' } }); } catch (_) {}
           }
           const stage = document.getElementById('stage');
-          const api = await window.MermaidDiagram.render(stage, passedCode, { ariaRoleDescription: 'flowchart-v2', attachResize: true });
+          const api = await window.MermaidDiagram.render(stage, passedCode, { ariaRoleDescription: 'flowchart-v2', attachResize: true, gateWheelToCtrlCmd: false });
           if (window.MermaidDiagram && typeof window.MermaidDiagram.attachOverlay === 'function') {
             window.MermaidDiagram.attachOverlay(stage, api, { code: passedCode });
           }
@@ -45,4 +45,3 @@
     </script>
   </body>
   </html>
-
