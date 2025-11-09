@@ -14,7 +14,7 @@ function extractMermaidBlocks(desc) {
   return blocks;
 }
 
-const ICON = 'https://f1nder.github.io/trello-mermaid/src/assets/icon-gray.png'
+const ICON = 'https://f1nder.github.io/trello-mermaid/src/assets/icon-gray.svg'
 
 tpu.initialize({
 
