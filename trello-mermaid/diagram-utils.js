@@ -97,7 +97,7 @@
     overlay.className = 'diagram-overlay';
     const makeBtn = (cls, icon, tip) => {
       const b = document.createElement('button');
-      b.type='button';
+      b.type = 'button';
       b.className = `diagram-btn ${cls}`;
       b.textContent = icon;
       if (tip) { b.title = tip; b.setAttribute('aria-label', tip); }
@@ -210,7 +210,7 @@
         return t.modal({
           url: './fullscreen.html',
           title: opts.title || 'Mermaid Diagram View',
-          accentColor: opts.accentColor || '#026AA7',
+          accentColor: opts.accentColor || '#242528',
           fullscreen: true,
           args: { code }
         });
@@ -226,7 +226,7 @@
     stage.innerHTML = '';
     await loadLibraries({ mermaidCdn: opts.mermaidCdn, panZoomCdn: opts.panZoomCdn });
     if (window.mermaid && typeof window.mermaid.initialize === 'function') {
-      try { window.mermaid.initialize({ startOnLoad: false, theme: 'dark' }); } catch (_) {}
+      try { window.mermaid.initialize({ startOnLoad: false, theme: 'dark' }); } catch (_) { }
     }
     const api = await render(stage, code, { ariaRoleDescription: 'flowchart-v2', attachResize: true });
     return api;
@@ -257,7 +257,7 @@
 
     const pz = initPanZoom(svgEl, opts.panZoomOptions);
 
-    function resize() { try { pz && pz.resize(); pz && pz.fit(); pz && pz.center(); } catch (_) {} }
+    function resize() { try { pz && pz.resize(); pz && pz.fit(); pz && pz.center(); } catch (_) { } }
     let onResize = null;
     if (opts.attachResize !== false) {
       onResize = () => resize();
@@ -268,11 +268,11 @@
       svg: svgEl,
       panZoom: pz,
       zoomIn: () => { if (pz) pz.zoomBy(1.2); },
-      zoomOut: () => { if (pz) pz.zoomBy(1/1.2); },
+      zoomOut: () => { if (pz) pz.zoomBy(1 / 1.2); },
       reset: () => { if (pz) { pz.reset(); pz.center(); pz.fit(); } },
       fit: () => { if (pz) pz.fit(); },
       resize,
-      destroy: () => { try { onResize && window.removeEventListener('resize', onResize); pz && pz.destroy(); } catch (_) {} },
+      destroy: () => { try { onResize && window.removeEventListener('resize', onResize); pz && pz.destroy(); } catch (_) { } },
     };
   }
 

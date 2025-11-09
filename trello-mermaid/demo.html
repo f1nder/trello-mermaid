@@ -6,8 +6,14 @@
     <title>Mermaid Demo</title>
     <link rel="stylesheet" href="./styles.css" />
     <style>
-      .demo-container { padding: 16px; }
-      .diagram-stage { border: none; border-radius: 6px; background: var(--panel); }
+      .demo-container {
+        padding: 16px;
+      }
+      .diagram-stage {
+        border: none;
+        border-radius: 6px;
+        background: var(--panel);
+      }
       textarea#md {
         width: 100%;
         box-sizing: border-box;
@@ -18,7 +24,8 @@
         border-radius: 6px;
         padding: 10px 12px;
         resize: vertical;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
         line-height: 1.4;
       }
     </style>
@@ -26,7 +33,8 @@
   </head>
   <body>
     <div class="demo-container">
-      <textarea id="md" rows="12">### Hi ist Diagram
+      <textarea id="md" rows="12">
+### Hi ist Diagram
 
 ```mermaid
 flowchart TD
@@ -48,56 +56,76 @@ flowchart LR
   DB -->|events| Analytics
 ```
       </textarea>
-      <div style="margin-bottom: 12px;"><button id="render">Render</button></div>
+      <div
+        style="margin-bottom: 12px; display: none; justify-content: flex-end"
+      >
+        <button id="render">Render</button>
+      </div>
       <div id="demo-list"></div>
     </div>
 
     <script>
       async function render() {
-        const list = document.getElementById('demo-list');
-        list.innerHTML = '';
+        const list = document.getElementById("demo-list");
+        list.innerHTML = "";
         await window.MermaidDiagram.load();
-        if (window.mermaid && typeof window.mermaid.initialize === 'function') {
-          window.mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+        if (window.mermaid && typeof window.mermaid.initialize === "function") {
+          window.mermaid.initialize({ startOnLoad: false, theme: "dark" });
         }
-        const md = document.getElementById('md').value;
-        const items = (window.MermaidDiagram && typeof window.MermaidDiagram.parseMarkdown === 'function')
-          ? window.MermaidDiagram.parseMarkdown(md)
-          : [];
+        const md = document.getElementById("md").value;
+        const items =
+          window.MermaidDiagram &&
+          typeof window.MermaidDiagram.parseMarkdown === "function"
+            ? window.MermaidDiagram.parseMarkdown(md)
+            : [];
         for (const item of items) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'diagram-wrapper';
-          if (item.titleMd && window.MermaidDiagram && typeof window.MermaidDiagram.renderTitleHtml === 'function') {
-            const t = document.createElement('div');
+          const wrapper = document.createElement("div");
+          wrapper.className = "diagram-wrapper";
+          if (
+            item.titleMd &&
+            window.MermaidDiagram &&
+            typeof window.MermaidDiagram.renderTitleHtml === "function"
+          ) {
+            const t = document.createElement("div");
             t.innerHTML = window.MermaidDiagram.renderTitleHtml(item.titleMd);
             wrapper.appendChild(t.firstChild);
           }
-          const stage = document.createElement('div');
-          stage.className = 'diagram-stage';
+          const stage = document.createElement("div");
+          stage.className = "diagram-stage";
           wrapper.appendChild(stage);
           list.appendChild(wrapper);
-          const api = await window.MermaidDiagram.render(stage, item.code, { ariaRoleDescription: 'flowchart-v2' });
-          if (window.MermaidDiagram && typeof window.MermaidDiagram.attachOverlay === 'function') {
-            window.MermaidDiagram.attachOverlay(stage, api, { code: item.code });
+          const api = await window.MermaidDiagram.render(stage, item.code, {
+            ariaRoleDescription: "flowchart-v2",
+          });
+          if (
+            window.MermaidDiagram &&
+            typeof window.MermaidDiagram.attachOverlay === "function"
+          ) {
+            window.MermaidDiagram.attachOverlay(stage, api, {
+              code: item.code,
+            });
           }
         }
       }
 
       (async function boot() {
         try {
-          document.getElementById('render').addEventListener('click', render);
-          const mdEl = document.getElementById('md');
+          document.getElementById("render").addEventListener("click", render);
+          const mdEl = document.getElementById("md");
           let tId;
-          mdEl.addEventListener('input', () => {
+          mdEl.addEventListener("input", () => {
             clearTimeout(tId);
             tId = setTimeout(render, 400);
           });
           await render();
         } catch (e) {
-          const list = document.getElementById('demo-list');
-          if (list) list.innerHTML = `<div class=\"diagram-error\">Mermaid render error: ${String(e)}</div>`;
+          const list = document.getElementById("demo-list");
+          if (list)
+            list.innerHTML = `<div class=\"diagram-error\">Mermaid render error: ${String(
+              e
+            )}</div>`;
         }
       })();
     </script>
   </body>
-  </html>
+</html>

@@ -95,11 +95,17 @@ function createDiagramEl(code, idx, titleMd) {
   const wrapper = document.createElement('div');
   wrapper.className = 'diagram-wrapper';
 
+  // Header row: Title (left) + Show Source (right)
+  const header = document.createElement('div');
+  header.className = 'diagram-header';
   if (titleMd) {
     const title = document.createElement('div');
     title.innerHTML = renderTitleHtml(titleMd);
-    wrapper.appendChild(title.firstChild);
+    header.appendChild(title.firstChild);
   }
+  const spacer = document.createElement('div');
+  spacer.className = 'spacer';
+  header.appendChild(spacer);
 
   const pre = document.createElement('pre');
   pre.className = 'diagram-source';
@@ -114,12 +120,13 @@ function createDiagramEl(code, idx, titleMd) {
     toggle.textContent = visible ? 'Show source' : 'Hide source';
     sizeToBody();
   });
+  header.appendChild(toggle);
 
   const out = document.createElement('div');
   out.className = 'diagram-out';
   out.id = `mermaid-diagram-${idx}`;
 
-  wrapper.appendChild(toggle);
+  wrapper.appendChild(header);
   wrapper.appendChild(pre);
   wrapper.appendChild(out);
   return { wrapper, out, pre };
@@ -156,10 +163,9 @@ async function init() {
     const TP = await loadTrelloClient();
     t = TP.iframe();
 
-    const [{ desc }, cdnOverride, collapsed] = await Promise.all([
+    const [{ desc }, cdnOverride] = await Promise.all([
       t.card('desc'),
-      t.get('board', 'shared', 'mermaidCdn'),
-      t.get('card', 'shared', 'mermaidCollapsed')
+      t.get('board', 'shared', 'mermaidCdn')
     ]);
     if (cdnOverride) {
       window.MERMAID_CDN = cdnOverride;
@@ -171,27 +177,6 @@ async function init() {
       await sizeToBody();
       return;
     }
-
-    const toggleBtn = document.getElementById('toggle-collapse');
-    const diagramsEl = document.getElementById('diagrams');
-
-    let isCollapsed = Boolean(collapsed);
-    function applyCollapsedUi() {
-      if (isCollapsed) {
-        diagramsEl.style.display = 'none';
-        toggleBtn.textContent = 'Expand';
-      } else {
-        diagramsEl.style.display = 'block';
-        toggleBtn.textContent = 'Collapse';
-      }
-      sizeToBody();
-    }
-
-    toggleBtn.addEventListener('click', async () => {
-      isCollapsed = !isCollapsed;
-      applyCollapsedUi();
-      await t.set('card', 'shared', { mermaidCollapsed: isCollapsed });
-    });
 
     await window.MermaidDiagram.load({ mermaidCdn: window.MERMAID_CDN });
     const mermaid = window.mermaid;
@@ -205,7 +190,6 @@ async function init() {
       themeVariables: { background: 'transparent' }
     });
     renderAll(mermaid, blocks);
-    applyCollapsedUi();
 
     // Re-render when Trello triggers a render (e.g., description updates)
     t.render(async () => {

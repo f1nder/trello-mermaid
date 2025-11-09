@@ -44,7 +44,7 @@ tpu.initialize({
       if (!blocks.length) return [];
       const count = blocks.length;
       const expandedHeight = Math.min(800, 200 + count * 260);
-      const collapsedHeight = 64; // header + controls only
+      const collapsedHeight = 16; // minimal iframe when collapsed
       return [
         {
           title: `Mermaid Diagrams (${count})`,
@@ -53,6 +53,12 @@ tpu.initialize({
             type: 'iframe',
             url: t.signUrl('./section.html'),
             height: collapsed ? collapsedHeight : expandedHeight,
+          },
+          action: {
+            text: collapsed ? 'Expand' : 'Collapse',
+            callback: function (t) {
+              return t.set('card', 'shared', { mermaidCollapsed: !collapsed });
+            },
           },
         },
       ];
@@ -64,6 +70,7 @@ tpu.initialize({
       title: 'Mermaid Renderer',
       url: './settings.html',
       height: 280,
+      accentColor: '#242528',
     });
   },
 });

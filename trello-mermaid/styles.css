@@ -2,7 +2,7 @@
   --fg: #e5e7eb; /* text */
   --muted: #94a3b8; /* secondary text */
   --border: #393a3f; /* borders */
-  --bg: #242528; /* page background */
+  --bg: #1c1d1f; /* page background */
   --panel: #242528; /* cards/panels */
   --button: #2d2f32; /* button bg */
   --button-fg: #e5e7eb; /* button text */
@@ -55,6 +55,15 @@ body {
   margin: 0 0 8px 0;
   padding: 0;
 }
+
+/* Header row for each diagram: title on left, actions on right */
+.diagram-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.diagram-header .spacer { flex: 1; }
 
 .diagram-out svg {
   max-width: 100%;
@@ -139,12 +148,13 @@ body {
 }
 
 .diagram-source {
-  background: #0b1021;
-  color: #e8e8e8;
+  background: var(--bg);
+  color: var(--fg);
   padding: 8px;
   border-radius: 4px;
   overflow: auto;
   max-height: 240px;
+  border: 1px solid var(--border);
 }
 
 .toggle-src {
