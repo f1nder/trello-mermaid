@@ -15,8 +15,8 @@ function extractMermaidBlocks(desc) {
 }
 
 const ICON = {
-  light: './icon.svg',
-  dark: './icon.svg'
+  light: './assets/icon.svg',
+  dark: './assets/icon.svg'
 };
 
 tpu.initialize({
