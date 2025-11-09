@@ -145,6 +145,9 @@ async function init() {
     });
 
     const mermaid = await loadMermaid();
+    if (!mermaid || typeof mermaid.initialize !== 'function') {
+      throw new Error('Mermaid failed to load or has no initialize()');
+    }
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'strict',
