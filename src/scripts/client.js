@@ -15,25 +15,12 @@ function extractMermaidBlocks(desc) {
 }
 
 const ICON = {
-  light: './assets/icon.svg',
-  dark: './assets/icon.svg'
+  light: './assets/icon.png',
+  dark: './assets/icon.png'
 };
 
 tpu.initialize({
-  'card-badges': function (t) {
-    return t.card('desc').then(({ desc }) => {
-      const blocks = extractMermaidBlocks(desc);
-      if (!blocks.length) return [];
-      return [
-        {
-          title: 'Mermaid',
-          text: String(blocks.length),
-          color: 'blue',
-          icon: ICON.light,
-        },
-      ];
-    });
-  },
+
 
   'card-back-section': function (t) {
     return Promise.all([
@@ -47,7 +34,7 @@ tpu.initialize({
       const collapsedHeight = 1; // effectively collapse iframe content area
       return [
         {
-          title: `Mermaid Diagrams (${count})`,
+          title: `Diagrams (${count})`,
           icon: ICON.light,
           content: {
             type: 'iframe',
@@ -64,14 +51,5 @@ tpu.initialize({
         },
       ];
     });
-  },
-
-  'show-settings': function (t) {
-    return t.modal({
-      title: 'Mermaid Renderer',
-      url: './settings.html',
-      height: 280,
-      accentColor: '#242528',
-    });
-  },
+  }
 });
