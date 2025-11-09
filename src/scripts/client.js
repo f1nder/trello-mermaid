@@ -31,7 +31,7 @@ tpu.initialize({
       // - Each diagram stage (collapsed) ~200px + header/padding ~40-60px
       // - Gap between wrappers: 16px
       // - Container vertical padding: 28px (12 top + 16 bottom)
-      const perDiagramCollapsed = 240; // approx collapsed diagram block height
+      const perDiagramCollapsed = 270; // approx collapsed diagram block height
       const gapBetween = 16;
       const containerVPad = 28;
       const expandedHeight = containerVPad + (count * perDiagramCollapsed) + Math.max(0, count - 1) * gapBetween;
