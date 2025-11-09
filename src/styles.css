@@ -231,6 +231,22 @@ body {
   cursor: pointer;
 }
 
+/* Make the header's "Show source" look like muted text */
+.diagram-header .toggle-src {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.diagram-header .toggle-src:hover {
+  text-decoration: underline;
+  color: var(--fg);
+}
+
 .toggle-collapse {
   appearance: none;
   border: 1px solid var(--border);
