@@ -1,5 +1,33 @@
 /* global TrelloPowerUp */
-const t = TrelloPowerUp.iframe();
+let t; // initialized after Trello client is available
+
+function loadTrelloClient() {
+  return new Promise((resolve, reject) => {
+    if (window.TrelloPowerUp) return resolve(window.TrelloPowerUp);
+    const existing = document.querySelector('script[data-tpu]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(window.TrelloPowerUp));
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://p.trellocdn.com/power-up/client/v1/power-up.min.js';
+    s.async = false;
+    s.setAttribute('data-tpu', '');
+    s.onload = () => resolve(window.TrelloPowerUp);
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+function sizeToBody() {
+  try {
+    if (t && typeof t.sizeTo === 'function') {
+      return t.sizeTo(document.body).catch(() => { });
+    }
+  } catch (_) { }
+  return Promise.resolve();
+}
 
 const mermaidBlockRegex = /```\s*mermaid\n([\s\S]*?)```/gim;
 
@@ -41,7 +69,7 @@ function createDiagramEl(code, idx) {
     const visible = pre.style.display !== 'none';
     pre.style.display = visible ? 'none' : 'block';
     toggle.textContent = visible ? 'Show source' : 'Hide source';
-    TrelloPowerUp.sizeTo(document.body).catch(() => {});
+    sizeToBody();
   });
 
   const out = document.createElement('div');
@@ -64,7 +92,7 @@ function renderAll(mermaid, blocks) {
     try {
       mermaid.render(`m-${i}`, code).then(({ svg }) => {
         out.innerHTML = svg;
-        TrelloPowerUp.sizeTo(document.body).catch(() => {});
+        sizeToBody();
       }).catch((err) => {
         out.innerHTML = `<div class="diagram-error">Mermaid render error: ${String(err)}</div>`;
       });
@@ -76,6 +104,9 @@ function renderAll(mermaid, blocks) {
 
 async function init() {
   try {
+    const TP = await loadTrelloClient();
+    t = TP.iframe();
+
     const [{ desc }, cdnOverride, collapsed] = await Promise.all([
       t.card('desc'),
       t.get('board', 'shared', 'mermaidCdn'),
@@ -88,7 +119,7 @@ async function init() {
 
     if (!blocks.length) {
       document.getElementById('diagrams').innerHTML = '<div class="empty">No ```mermaid``` code blocks found in the description.</div>';
-      await TrelloPowerUp.sizeTo(document.body);
+      await sizeToBody();
       return;
     }
 
@@ -104,7 +135,7 @@ async function init() {
         diagramsEl.style.display = 'block';
         toggleBtn.textContent = 'Collapse';
       }
-      TrelloPowerUp.sizeTo(document.body).catch(() => {});
+      sizeToBody();
     }
 
     toggleBtn.addEventListener('click', async () => {
@@ -114,14 +145,34 @@ async function init() {
     });
 
     const mermaid = await loadMermaid();
-    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' });
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: 'dark',
+      themeVariables: { background: 'transparent' }
+    });
     renderAll(mermaid, blocks);
     applyCollapsedUi();
+
+    // Re-render when Trello triggers a render (e.g., description updates)
+    t.render(async () => {
+      try {
+        const { desc: latestDesc } = await t.card('desc');
+        const latestBlocks = extractMermaidBlocks(latestDesc);
+        if (latestBlocks.length) {
+          renderAll(mermaid, latestBlocks);
+        } else {
+          document.getElementById('diagrams').innerHTML = '<div class="empty">No ```mermaid``` code blocks found in the description.</div>';
+        }
+      } finally {
+        sizeToBody();
+      }
+    });
   } catch (err) {
     const el = document.getElementById('diagrams');
     el.innerHTML = `<div class="diagram-error">Failed to initialize: ${String(err)}</div>`;
   } finally {
-    TrelloPowerUp.sizeTo(document.body).catch(() => {});
+    sizeToBody();
   }
 }
 

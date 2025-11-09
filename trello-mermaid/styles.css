@@ -1,8 +1,11 @@
 :root {
-  --fg: #172b4d;
-  --muted: #6b778c;
-  --border: #dfe1e6;
-  --bg: #ffffff;
+  --fg: #e5e7eb;         /* text */
+  --muted: #94a3b8;      /* secondary text */
+  --border: #334155;     /* borders */
+  --bg: #0f172a;         /* page background */
+  --panel: #111827;      /* cards/panels */
+  --button: #1f2937;     /* button bg */
+  --button-fg: #e5e7eb;  /* button text */
 }
 
 html, body {
@@ -43,7 +46,7 @@ html, body {
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #fafbfc;
+  background: var(--panel);
 }
 
 .diagram-out svg {
@@ -62,8 +65,8 @@ html, body {
 .toggle-src {
   appearance: none;
   border: 1px solid var(--border);
-  background: white;
-  color: var(--fg);
+  background: var(--button);
+  color: var(--button-fg);
   padding: 4px 8px;
   border-radius: 4px;
   margin-bottom: 8px;
@@ -73,8 +76,8 @@ html, body {
 .toggle-collapse {
   appearance: none;
   border: 1px solid var(--border);
-  background: white;
-  color: var(--fg);
+  background: var(--button);
+  color: var(--button-fg);
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
@@ -87,5 +90,5 @@ html, body {
 }
 
 .diagram-error {
-  color: #b71c1c;
+  color: #ff6b6b;
 }
