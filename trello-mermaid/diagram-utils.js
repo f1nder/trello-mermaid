@@ -202,6 +202,24 @@
   }
 
   async function openModal(code, opts = {}) {
+    // Prefer Trello's native fullscreen modal when available
+    try {
+      if (window.TrelloPowerUp && typeof window.TrelloPowerUp.iframe === 'function') {
+        const t = window.TrelloPowerUp.iframe();
+        // Use Trello modal with fullscreen flag; pass code via args
+        return t.modal({
+          url: './fullscreen.html',
+          title: opts.title || 'Mermaid Diagram View',
+          accentColor: opts.accentColor || '#026AA7',
+          fullscreen: true,
+          args: { code }
+        });
+      }
+    } catch (_) {
+      // Fallback to custom modal below
+    }
+
+    // Fallback: use in-page custom modal
     const root = ensureModalRoot();
     root.style.display = 'flex';
     const stage = root.querySelector('#md-modal-stage');

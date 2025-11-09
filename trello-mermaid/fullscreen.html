@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mermaid Diagram View</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+      // Default Mermaid CDN (can be overridden via board settings)
+      window.MERMAID_CDN = "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js";
+    </script>
+    <script defer src="./diagram-utils.js"></script>
+    <style>
+      html, body { height: 100%; }
+      body { display: flex; flex-direction: column; }
+      #stage { flex: 1 1 auto; height: 100vh; }
+    </style>
+  </head>
+  <body>
+    <div id="stage" class="diagram-stage fullscreen expanded"></div>
+    <script>
+      (async function () {
+        try {
+          const TP = window.TrelloPowerUp;
+          const t = TP && typeof TP.iframe === 'function' ? TP.iframe() : null;
+          const passedCode = t ? (t.arg('code') || '') : '';
+          const cdnOverride = t ? await t.get('board', 'shared', 'mermaidCdn') : null;
+          if (cdnOverride) { window.MERMAID_CDN = cdnOverride; }
+
+          await window.MermaidDiagram.load({ mermaidCdn: window.MERMAID_CDN });
+          if (window.mermaid && typeof window.mermaid.initialize === 'function') {
+            try { window.mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'dark', themeVariables: { background: 'transparent' } }); } catch (_) {}
+          }
+          const stage = document.getElementById('stage');
+          const api = await window.MermaidDiagram.render(stage, passedCode, { ariaRoleDescription: 'flowchart-v2', attachResize: true });
+          if (window.MermaidDiagram && typeof window.MermaidDiagram.attachOverlay === 'function') {
+            window.MermaidDiagram.attachOverlay(stage, api, { code: passedCode });
+          }
+        } catch (err) {
+          const el = document.getElementById('stage');
+          el.innerHTML = '<div class="diagram-error">Failed to load fullscreen view: ' + String(err && (err.message || err)) + '</div>';
+        }
+      })();
+    </script>
+  </body>
+  </html>
+
