@@ -6,6 +6,12 @@
     <title>Mermaid Section</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <style>
+      /* Make the iframe (section) background transparent inside Trello */
+      html, body { background: transparent !important; }
+      /* Ensure diagram canvas doesn't paint a solid background */
+      .diagram-stage svg { background: transparent !important; }
+    </style>
     <script>
       // Default Mermaid CDN (can be overridden via board settings)
       window.MERMAID_CDN = "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js";
